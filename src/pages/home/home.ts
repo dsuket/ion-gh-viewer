@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
+import {Observable} from 'rxjs';
+import {GithubApiProvider} from '../../providers/github-api/github-api';
+import {HomeRepositoriesViewer} from '../../providers/github-api/query/home-repositories';
+import {RepoPage} from '../repo/repo';
 
 @Component({
   selector: 'page-home',
@@ -7,8 +11,31 @@ import { NavController } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  repos$: Observable<HomeRepositoriesViewer>;
 
+  constructor(
+    private githubApi: GithubApiProvider,
+    private navCtrl: NavController
+  ) {
   }
 
+  ionViewWillEnter(): void {
+    this.initRepos();
+  }
+
+  openRepo(repo: GQL.IRepository): void {
+    const params = {
+      repo,
+      name: repo.name,
+      owner: repo.owner.login,
+    }
+    this.navCtrl.push(RepoPage, params);
+  }
+
+  private initRepos(): void {
+    this.repos$ = this.githubApi.getHomeRepos()
+      .debug('getHomeRepos viewer')
+      .map(resp => resp.data.viewer)
+      .share();
+  }
 }

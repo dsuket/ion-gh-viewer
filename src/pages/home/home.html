@@ -4,14 +4,35 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+<ion-content>
+
+  <h3>Organization</h3>
+  <ion-list *ngFor="let org of (repos$ | async)?.organizations.nodes">
+    <ion-list-header>
+      {{org.name}}
+    </ion-list-header>
+    <button ion-item *ngFor="let repo of org.repos.nodes" (click)="openRepo(repo)">
+      {{repo.nameWithOwner}}
+    </button>
+  </ion-list>
+
+  <h3>My Repositories</h3>
+  <ion-list>
+    <ion-list-header>
+      My Repos
+    </ion-list-header>
+    <button ion-item *ngFor="let repo of (repos$ | async)?.own.nodes" (click)="openRepo(repo)">
+      {{repo.nameWithOwner}}
+    </button>
+  </ion-list>
+
+  <ion-list>
+    <ion-list-header>
+      Forked Repos
+    </ion-list-header>
+    <button ion-item *ngFor="let repo of (repos$ | async)?.forked.nodes" (click)="openRepo(repo)">
+      {{repo.nameWithOwner}}
+    </button>
+  </ion-list>
+
 </ion-content>
