@@ -42,6 +42,10 @@ export class GithubApiProvider {
     this.token = token;
   }
 
+  /**
+   * 生httpを使う
+   * @param param
+   */
   accessApi(param?: any): Observable<any> {
     if (!this.token) {
       return Observable.throw('token is null.');

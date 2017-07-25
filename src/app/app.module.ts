@@ -9,6 +9,8 @@ import { IonicStorageModule } from '@ionic/storage';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { CloudSettings, CloudModule } from '@ionic/cloud-angular';
+
 import { MyApp } from './app.component';
 // Pages
 import { AboutPage } from '../pages/about/about';
@@ -36,10 +38,17 @@ import {provideClient} from '../misc/appolo/github-gql-client';
 import {deepLinkConfig} from '../pages/routes';
 
 import '../misc/operator/debug';
+import { RepositoriesComponent } from '../components/repositories/repositories';
 
 const ionicConfig = {
   // locationStrategy: 'path'
   locationStrategy: 'hash'
+};
+
+const cloudSettings: CloudSettings = {
+  core: {
+    'app_id': '76e00458'
+  }
 };
 
 @NgModule({
@@ -52,11 +61,13 @@ const ionicConfig = {
     WelcomePage,
     SettingPage,
     RepoPage,
+    RepositoriesComponent,
   ],
   imports: [
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp, ionicConfig, deepLinkConfig),
+    CloudModule.forRoot(cloudSettings),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     IonicStorageModule.forRoot(),

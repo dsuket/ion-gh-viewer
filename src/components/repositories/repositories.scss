@@ -1,0 +1,7 @@
+@import '../../theme/_loader.scss';
+
+repositories {
+  .loader {
+    @extend .loader;
+  }
+}

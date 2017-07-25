@@ -1,0 +1,9 @@
+<ion-list>
+  <ion-list-header>
+    {{title}}
+  </ion-list-header>
+  <div class="loader" *ngIf="!repos">loading...</div>
+  <button ion-item *ngFor="let repo of repos" (click)="openRepo(repo)">
+    {{repo.nameWithOwner}}
+  </button>
+</ion-list>

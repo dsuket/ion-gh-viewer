@@ -15,7 +15,6 @@ export class HomePage {
 
   constructor(
     private githubApi: GithubApiProvider,
-    private navCtrl: NavController
   ) {
   }
 
@@ -23,18 +22,10 @@ export class HomePage {
     this.initRepos();
   }
 
-  openRepo(repo: GQL.IRepository): void {
-    const params = {
-      repo,
-      name: repo.name,
-      owner: repo.owner.login,
-    }
-    this.navCtrl.push(RepoPage, params);
-  }
-
   private initRepos(): void {
     this.repos$ = this.githubApi.getHomeRepos()
       .debug('getHomeRepos viewer')
+      // .delay(100000)
       .map(resp => resp.data.viewer)
       .share();
   }
