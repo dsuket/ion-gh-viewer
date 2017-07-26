@@ -71,6 +71,7 @@ $colors: (
 
 @import "ionic.theme.default";
 
+$background-color: color($colors, light);
 
 // Ionicons
 // --------------------------------------------------
@@ -85,3 +86,9 @@ $colors: (
 
 @import "roboto";
 @import "noto-sans";
+
+// Custom Style
+// --------------------------------------------------
+@import "./common";
+@import "./issue";
+

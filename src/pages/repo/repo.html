@@ -7,16 +7,46 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>repo</ion-title>
+    <ion-title>{{(repo$ | async)?.nameWithOwner}}</ion-title>
   </ion-navbar>
 
 </ion-header>
 
+<ion-content>
+<ng-container *ngIf="repo$ | async as repo">
 
-<ion-content padding>
+  <ion-card class="respo-abstract">
+    <ion-card-header class="respo-abstract-header">
+      {{repo.nameWithOwner}}
+    </ion-card-header>
+    <ion-card-content class="respo-abstract-content">
+      <p class="repo-description">
+        {{repo.description}}
+      </p>
+      <div class="repo-meta">
+        <div class="pushedAt">Last pushed: {{repo.pushedAt | fromnow}}</div>
+      </div>
+    </ion-card-content>
+  </ion-card>
 
-  {{(repo$ | async)?.nameWithOwner}}
-  {{(repo$ | async)?.description}}
-  {{(repo$ | async)?.pushedAt}}
-  {{(repo$ | async)?.updatedAt}}
+  <ion-card class="issues" *ngIf="repo.issues as issues">
+    <ion-list>
+      <ion-list-header>
+        Issues <span class="issues-totalCount">{{issues.totalCount}}</span>
+      </ion-list-header>
+      <button class="issue-item" ion-item *ngFor="let issue of issues.nodes">
+        <h2 class="issue-title">{{issue.title}}</h2>
+        <p class="issue-meta">opend by {{issue.author.login}} about {{issue.createdAt | fromnow}}</p>
+        <ion-note class="issue-meta-number" item-end>#{{issue.number}}</ion-note>
+      </button>
+      <button class="show-more" ion-item
+        *ngIf="issues.totalCount > issues.nodes.length"
+        (click)="openIssuesPage()"
+        >
+        Show more {{issues.totalCount - issues.nodes.length}} issues
+      </button>
+    </ion-list>
+  </ion-card>
+
+</ng-container>
 </ion-content>

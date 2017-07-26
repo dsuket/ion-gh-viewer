@@ -7,10 +7,21 @@ import {provideClient} from '../../misc/appolo/github-gql-client';
 import {ViewerProfileResponse, viewerProfile} from './query/viewer-profile';
 import {HomeRepositoriesResponse, HomeRepositories} from './query/home-repositories';
 import {RepositoryResponse, Repository} from './query/repository';
+import {Issues, IssuesResponse} from './query/issues';
 
-export interface RepositoryVariabled {
+export interface RepositoryVariables {
   owner: string;
   name: string;
+}
+
+export type IssueState = 'OPEN' | 'CLOSED';
+
+export interface IssuesVariables {
+  owner: string;
+  name: string;
+  first?: number;
+  aster?: string;
+  states?: IssueState;
 }
 
 /*
@@ -27,15 +38,17 @@ export class GithubApiProvider {
     private auth: AuthProvider,
   ) {
     const client = provideClient();
-    this.auth.user$.subscribe(user => {
-      if (user) {
-        this.token = user.token;
-        client.token = user.token;
-      } else {
-        this.token = null;
-        client.token = null;
-      }
-    })
+    this.auth.user$
+      .debug('GithubApiProvider auth.user$')
+      .subscribe(user => {
+        if (user) {
+          this.token = user.token;
+          client.token = user.token;
+        } else {
+          this.token = null;
+          client.token = null;
+        }
+      });
   }
 
   setToken(token: string): void {
@@ -81,9 +94,16 @@ export class GithubApiProvider {
     });
   }
 
-  getRepo(variables: RepositoryVariabled): ApolloQueryObservable<RepositoryResponse> {
+  getRepo(variables: RepositoryVariables): ApolloQueryObservable<RepositoryResponse> {
     return this.apollo.watchQuery<RepositoryResponse>({
       query: Repository,
+      variables
+    });
+  }
+
+  getIssues(variables: IssuesVariables): ApolloQueryObservable<IssuesResponse> {
+    return this.apollo.watchQuery<IssuesResponse>({
+      query: Issues,
       variables
     });
   }

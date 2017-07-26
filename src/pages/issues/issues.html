@@ -1,0 +1,62 @@
+<!--
+  Generated template for the IssuesPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Issues</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+
+  <ion-searchbar
+    [(ngModel)]="searchInput"
+  ></ion-searchbar>
+
+  <div padding>
+    <ion-segment [(ngModel)]="states">
+      <ion-segment-button value="OPEN">
+        OPEN
+      </ion-segment-button>
+      <ion-segment-button value="CLOSED">
+        CLOSED
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <!--
+    virtualScroll だと ngIf が使えない。
+    そのため、非同期のasyncや、初期値がundefinedにできない。また ? 演算子も使えない。
+    virtualScrollにbindする変数は配列にする必要がある。
+  -->
+  <!--
+  <ion-list class="issues" [virtualScroll]="issues" approxItemHeight="55px">
+    <button ion-item class="issue-item" *virtualItem="let issue">
+      <h2 class="issue-title">{{issue.title}}</h2>
+      <p class="issue-meta">opend by {{issue.author.login}} about {{issue.createdAt | fromnow}}</p>
+      <ion-note class="issue-meta-number" item-end>#{{issue.number}}</ion-note>
+    </button>
+  </ion-list>
+  -->
+<!--
+  通常List版
+-->
+  <ion-list class="issues">
+    <button ion-item class="issue-item" *ngFor="let issue of issues; trackBy: getNumber ">
+      <h2 class="issue-title">{{issue.title}}</h2>
+      <p class="issue-meta">opend by {{issue.author.login}} about {{issue.createdAt | fromnow}}</p>
+      <ion-note class="issue-meta-number" item-end>#{{issue.number}}</ion-note>
+    </button>
+  </ion-list>
+
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" [enabled]="hasNextPage">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+  <div class="end-of-list" *ngIf="!hasNextPage">End of list</div>
+
+</ion-content>

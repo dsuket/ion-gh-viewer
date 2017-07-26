@@ -1,0 +1,29 @@
+.issues {
+
+  .issues-totalCount {
+    display: inline-block;
+    background-color: #eee;
+    border-radius: 1em;
+    padding: 2px 5px;
+    font-size: 0.8em;
+  }
+
+  .issue-item {
+
+    .issue-title {
+      font-size: 1.4rem;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .issue-meta {
+      font-size: 1.2rem;
+    }
+
+    .issue-meta-number {
+      font-size: 12px;
+      align-self: flex-start;
+      margin: 16px 0;
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {NavController} from 'ionic-angular';
 import {RepoPage} from '../../pages/repo/repo';
 
@@ -18,19 +18,20 @@ export class RepositoriesComponent {
   title: string;
 
   @Input()
+  totalCount: number;
+
+  @Input()
   repos: GQL.IRepository[];
+
+  @Output()
+  selectRepo = new EventEmitter<GQL.IRepository>()
 
   constructor(
     private navCtrl: NavController
   ) {}
 
-  openRepo(repo: GQL.IRepository): void {
-    const params = {
-      repo,
-      name: repo.name,
-      owner: repo.owner.login,
-    }
-    this.navCtrl.push(RepoPage, params);
+  clickRepo(repo: GQL.IRepository): void {
+    this.selectRepo.emit(repo);
   }
 
 

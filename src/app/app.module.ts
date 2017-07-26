@@ -20,6 +20,8 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { WelcomePage } from '../pages/welcome/welcome';
 import { SettingPage } from '../pages/setting/setting';
 import { RepoPage } from '../pages/repo/repo';
+import { ReposPage } from '../pages/repos/repos';
+import { IssuesPage } from '../pages/issues/issues';
 
 // Providers
 import { AuthProvider } from '../providers/auth/auth';
@@ -39,6 +41,7 @@ import {deepLinkConfig} from '../pages/routes';
 
 import '../misc/operator/debug';
 import { RepositoriesComponent } from '../components/repositories/repositories';
+import { FromnowPipe } from '../pipes/fromnow/fromnow';
 
 const ionicConfig = {
   // locationStrategy: 'path'
@@ -61,7 +64,10 @@ const cloudSettings: CloudSettings = {
     WelcomePage,
     SettingPage,
     RepoPage,
+    ReposPage,
     RepositoriesComponent,
+    FromnowPipe,
+    IssuesPage,
   ],
   imports: [
     BrowserModule,
@@ -71,7 +77,7 @@ const cloudSettings: CloudSettings = {
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     IonicStorageModule.forRoot(),
-    ApolloModule.forRoot(provideClient)
+    ApolloModule.forRoot(provideClient),
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -83,6 +89,8 @@ const cloudSettings: CloudSettings = {
     WelcomePage,
     SettingPage,
     RepoPage,
+    ReposPage,
+    IssuesPage,
   ],
   providers: [
     StatusBar,

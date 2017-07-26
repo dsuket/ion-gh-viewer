@@ -9,7 +9,7 @@ import {GithubApiProvider} from '../../providers/github-api/github-api';
 })
 export class RepoPage {
 
-  public repo$ = new EventEmitter<any>();
+  public repo$ = new EventEmitter<GQL.IRepository>();
 
   constructor(
     private githubApi: GithubApiProvider,
@@ -19,7 +19,6 @@ export class RepoPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad RepoPage');
     const repo = this.navParams.get('repo');
     if (repo) {
       this.repo$.emit(repo);
@@ -27,15 +26,20 @@ export class RepoPage {
   }
 
   ionViewWillEnter(): void {
-    console.log('ionViewWillEnter RepoPage');
     const owner = this.navParams.get('owner');
     const name = this.navParams.get('name');
-    console.log('call getRepo', {owner, name});
     this.githubApi.getRepo({owner, name})
       .map(res => res.data.repository)
+      .debug('repository')
       .subscribe(repo => {
         this.repo$.emit(repo)
       })
+  }
+
+  openIssuesPage(): void {
+    const owner = this.navParams.get('owner');
+    const name = this.navParams.get('name');
+    this.navCtrl.push('IssuesPage', {owner, name});
   }
 
 }

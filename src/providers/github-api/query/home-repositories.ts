@@ -18,6 +18,7 @@ query HomeRepositories($orgNum: Int, $orgReposNum: Int, $reposNum: Int) {
         name
         url
         repos: repositories(first: $orgReposNum, orderBy: {field: PUSHED_AT, direction: DESC}) {
+          totalCount
           nodes {
             ...repo
           }
@@ -44,6 +45,7 @@ fragment repo on Repository {
   owner {login},
   nameWithOwner
   url
+  viewerHasStarred
   watchersCount: watchers {
     totalCount
   }

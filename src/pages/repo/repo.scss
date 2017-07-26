@@ -1,3 +1,19 @@
 page-repo {
 
+  .respo-abstract-content {
+    padding: 0;
+  }
+
+  .repo-description {
+    color: #333;
+    padding: 0 16px 16px 16px;
+  }
+
+  .repo-meta {
+    border: solid 1px $background-color;
+    padding: 8px;
+    text-align: right;
+    color: #999;
+  }
+
 }

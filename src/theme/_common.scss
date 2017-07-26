@@ -1,0 +1,21 @@
+ion-icon[smaller] {
+  transform: scale(0.8);
+  .item & {
+    margin: 4px 8px 4px 0;
+  }
+}
+
+.item.show-more {
+  text-align: center;
+  font-size: 1em;
+  color: color($colors, primary);
+}
+
+.end-of-list {
+  text-align: center;
+  font-size: 1em;
+  color: #ccc;
+  text-transform: capitalize;
+  font-style: italic;
+  margin: -16px 0 16px;
+}

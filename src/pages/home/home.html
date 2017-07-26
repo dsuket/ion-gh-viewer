@@ -5,16 +5,34 @@
 </ion-header>
 
 <ion-content>
-  <h3>Organization</h3>
+  <h2>Repositories</h2>
   <div class="loader" *ngIf="!(repos$ | async)">loading...</div>
-  <repositories
-    *ngFor="let org of (repos$ | async)?.organizations.nodes"
-    [title]="org.name"
-    [repos]="org.repos.nodes"
-  ></repositories>
 
-  <h3>My Repositories</h3>
-  <repositories [title]="'My Repos'" [repos]="(repos$ | async)?.own.nodes"></repositories>
-  <repositories [title]="'Forked Repos'" [repos]="(repos$ | async)?.forked.nodes"></repositories>
+  <ion-card *ngFor="let org of (repos$ | async)?.organizations.nodes">
+    <repositories
+      [title]="org.name"
+      [repos]="org.repos.nodes"
+      [totalCount]="org.repos.totalCount"
+      (selectRepo)="openRepo($event)"
+    ></repositories>
+  </ion-card>
+
+  <ion-card>
+    <repositories
+      [title]="'My Repos'"
+      [repos]="(repos$ | async)?.own.nodes"
+      [totalCount]="(repos$ | async)?.own.totalCount"
+      (selectRepo)="openRepo($event)"
+    ></repositories>
+  </ion-card>
+
+  <ion-card>
+    <repositories
+      [title]="'Forked Repos'"
+      [repos]="(repos$ | async)?.forked.nodes"
+      [totalCount]="(repos$ | async)?.forked.totalCount"
+      (selectRepo)="openRepo($event)"
+    ></repositories>
+  </ion-card>
 
 </ion-content>

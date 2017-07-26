@@ -2,8 +2,12 @@
   <ion-list-header>
     {{title}}
   </ion-list-header>
-  <div class="loader" *ngIf="!repos">loading...</div>
-  <button ion-item *ngFor="let repo of repos" (click)="openRepo(repo)">
+  <button ion-item *ngFor="let repo of repos" (click)="clickRepo(repo)">
+    <ion-icon smaller name="star-outline" item-start *ngIf="!repo.viewerHasStarred"></ion-icon>
+    <ion-icon smaller name="star" item-start *ngIf="repo.viewerHasStarred"></ion-icon>
     {{repo.nameWithOwner}}
+  </button>
+  <button class="show-more" ion-item *ngIf="totalCount > repos?.length">
+    Show more {{totalCount - repos.length}} repos
   </button>
 </ion-list>
