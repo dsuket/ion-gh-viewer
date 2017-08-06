@@ -31,10 +31,10 @@
 
   <ion-card class="issues" *ngIf="repo.issues as issues">
     <ion-list>
-      <ion-list-header>
+      <ion-list-header (click)="openIssuesPage()">
         Issues <span class="issues-totalCount">{{issues.totalCount}}</span>
       </ion-list-header>
-      <button class="issue-item" ion-item *ngFor="let issue of issues.nodes">
+      <button class="issue-item" ion-item *ngFor="let issue of issues.nodes" (click)="openIssuePage(issue)">
         <h2 class="issue-title">{{issue.title}}</h2>
         <p class="issue-meta">opend by {{issue.author.login}} about {{issue.createdAt | fromnow}}</p>
         <ion-note class="issue-meta-number" item-end>#{{issue.number}}</ion-note>

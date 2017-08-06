@@ -4,7 +4,7 @@ export interface RepositoryResponse {
   repository: GQL.IRepository;
 }
 
-export const Repository = gql`
+export const repositoryQuery = gql`
 query Repository($owner: String!, $name: String!, $first: Int = 5, $states: [IssueState!] = OPEN) {
   repository(owner: $owner, name: $name) {
     nameWithOwner

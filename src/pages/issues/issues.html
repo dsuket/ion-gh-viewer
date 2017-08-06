@@ -34,7 +34,6 @@
     そのため、非同期のasyncや、初期値がundefinedにできない。また ? 演算子も使えない。
     virtualScrollにbindする変数は配列にする必要がある。
   -->
-  <!--
   <ion-list class="issues" [virtualScroll]="issues" approxItemHeight="55px">
     <button ion-item class="issue-item" *virtualItem="let issue">
       <h2 class="issue-title">{{issue.title}}</h2>
@@ -42,10 +41,9 @@
       <ion-note class="issue-meta-number" item-end>#{{issue.number}}</ion-note>
     </button>
   </ion-list>
-  -->
-<!--
+
+  <!--
   通常List版
--->
   <ion-list class="issues">
     <button ion-item class="issue-item" *ngFor="let issue of issues; trackBy: getNumber ">
       <h2 class="issue-title">{{issue.title}}</h2>
@@ -53,6 +51,7 @@
       <ion-note class="issue-meta-number" item-end>#{{issue.number}}</ion-note>
     </button>
   </ion-list>
+  -->
 
   <ion-infinite-scroll (ionInfinite)="doInfinite($event)" [enabled]="hasNextPage">
     <ion-infinite-scroll-content></ion-infinite-scroll-content>

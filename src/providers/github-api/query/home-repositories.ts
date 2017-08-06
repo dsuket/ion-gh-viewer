@@ -10,7 +10,7 @@ export interface HomeRepositoriesViewer {
   forked: GQL.IRepositoryConnection;
 }
 
-export const HomeRepositories = gql`
+export const homeRepositoriesQuery = gql`
 query HomeRepositories($orgNum: Int, $orgReposNum: Int, $reposNum: Int) {
   viewer {
     organizations(first: $orgNum) {

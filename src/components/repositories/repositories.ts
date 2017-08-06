@@ -28,7 +28,8 @@ export class RepositoriesComponent {
 
   constructor(
     private navCtrl: NavController
-  ) {}
+  ) {
+  }
 
   clickRepo(repo: GQL.IRepository): void {
     this.selectRepo.emit(repo);

@@ -13,7 +13,7 @@ export interface ViewerProfileResponse {
   loading: boolean;
 }
 
-export const viewerProfile = gql`
+export const viewerProfileQuery = gql`
 query ViewerProfile {
   viewer {
     login

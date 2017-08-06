@@ -5,7 +5,6 @@ import * as firebase from 'firebase/app';
 import { Platform } from 'ionic-angular';
 import {User} from '../../models/user';
 import { Storage } from '@ionic/storage';
-import { Auth } from '@ionic/cloud-angular';
 
 /*
   Generated class for the AuthProvider provider.
@@ -22,7 +21,6 @@ export class AuthProvider {
     private platform: Platform,
     private storage: Storage,
     private afAuth: AngularFireAuth,
-    private auth: Auth,
   ) {
     this.loadUser();
   }
@@ -51,7 +49,7 @@ export class AuthProvider {
     );
 
     return logout$
-      .debug('loginWithGithub')
+      .debug('logout')
       .do(() => this.user$.next(null))
       .first();
   }
@@ -62,12 +60,10 @@ export class AuthProvider {
   private loadUser(): void {
     this.storage.get('user')
       .then(user => {
-        console.log('this.storage.get', user);
         this.user$.next(user);
         this.user$
           .filter(u => user !== u)
           .subscribe(user => {
-            console.log('this.storage.set', user);
             this.storage.set('user', user);
           });
       });
@@ -99,12 +95,15 @@ export class AuthProvider {
    * not implements
    */
   private loginWithGithubOnCordova(): Observable<User> {
-    return Observable.fromPromise(this.auth.login('github'))
-      .mergeMap(result => {
-        const githubCredential = firebase.auth.GoogleAuthProvider.credential(result.token);
-        return firebase.auth().signInWithCredential(githubCredential);
-      })
+    const githubProvider = new firebase.auth.GithubAuthProvider();
+    githubProvider.addScope('repo');
+    githubProvider.addScope('read:org');
+    return Observable.fromPromise(this.afAuth.auth.signInWithRedirect(githubProvider))
+      .debug('loginWithGithubOnCordova: signInWithRedirect')
+      .mergeMap(() => this.afAuth.auth.getRedirectResult())
+      .debug('loginWithGithubOnCordova: getRedirectResult')
       .map(result => this.createUser(result));
+
   }
 
   /**

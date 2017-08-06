@@ -22,6 +22,8 @@ export class IssuesPage {
   issues: GQL.IIssue[] = [];
   issues2: GQL.IIssue[];
 
+  hasNextPage = true;
+
   get states(): IssueState {
     return this._states;
   }
@@ -39,8 +41,6 @@ export class IssuesPage {
     this._searchInput = input;
     this.searchLocal(input);
   }
-
-  hasNextPage = true;
 
   private _searchInput = '';
   private _states: IssueState = 'OPEN';

@@ -13,7 +13,7 @@ import {User} from '../models/user';
 })
 export class MyApp {
 
-  rootPage:any;
+  rootPage:any = TabsPage;
 
   private loader: Loading;
 
@@ -44,8 +44,6 @@ export class MyApp {
 
   private initPlatformReady(): Promise<any> {
     return this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
     });
@@ -53,6 +51,7 @@ export class MyApp {
 
   private initAuthUser(): void {
     this.auth.user$
+      .debug('MyApp#initAuthUser')
       .filter(user => user !== undefined)
       .subscribe(user => this.initRootPage(user))
   }

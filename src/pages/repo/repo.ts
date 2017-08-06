@@ -2,6 +2,13 @@ import { Component, EventEmitter } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import {Observable} from 'rxjs/Observable';
 import {GithubApiProvider} from '../../providers/github-api/github-api';
+import {IssuesPage} from '../issues/issues';
+import {IssuePage} from '../issue/issue';
+
+interface NavParamValues {
+  owner: string;
+  name: string;
+}
 
 @Component({
   selector: 'page-repo',
@@ -26,20 +33,30 @@ export class RepoPage {
   }
 
   ionViewWillEnter(): void {
-    const owner = this.navParams.get('owner');
-    const name = this.navParams.get('name');
-    this.githubApi.getRepo({owner, name})
+    const vars = this.getNabParamValues();
+    this.githubApi.getRepo(vars)
       .map(res => res.data.repository)
-      .debug('repository')
+      .debug('RepoPage#ionViewWillEnter repository')
       .subscribe(repo => {
         this.repo$.emit(repo)
       })
   }
 
   openIssuesPage(): void {
+    this.navCtrl.push(IssuesPage, this.getNabParamValues());
+  }
+
+  openIssuePage(issue: GQL.IIssue): void {
+    const param = Object.assign({
+      issueNo: issue.number
+    }, this.getNabParamValues());
+    this.navCtrl.push(IssuePage, param);
+  }
+
+  private getNabParamValues(): NavParamValues {
     const owner = this.navParams.get('owner');
     const name = this.navParams.get('name');
-    this.navCtrl.push('IssuesPage', {owner, name});
+    return {owner, name};
   }
 
 }

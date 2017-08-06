@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
-import {Observable} from 'rxjs';
+import {BehaviorSubject} from 'rxjs';
 import {AuthProvider} from '../auth/auth';
 import { Apollo, ApolloQueryObservable } from 'apollo-angular';
-import {provideClient} from '../../misc/appolo/github-gql-client';
-import {ViewerProfileResponse, viewerProfile} from './query/viewer-profile';
-import {HomeRepositoriesResponse, HomeRepositories} from './query/home-repositories';
-import {RepositoryResponse, Repository} from './query/repository';
-import {Issues, IssuesResponse} from './query/issues';
+import {provideClient, GithubGqlClient} from '../../misc/appolo/github-gql-client';
+import {ViewerProfileResponse, viewerProfileQuery} from './query/viewer-profile';
+import {HomeRepositoriesResponse, homeRepositoriesQuery} from './query/home-repositories';
+import {RepositoryResponse, repositoryQuery} from './query/repository';
+import {issuesQuery, IssuesResponse} from './query/issues';
+import {IssueResponse, issueQuery} from './query/issue';
 
 export interface RepositoryVariables {
   owner: string;
@@ -24,59 +24,41 @@ export interface IssuesVariables {
   states?: IssueState;
 }
 
+export interface IssueVariables {
+  owner: string;
+  name: string;
+  issueNo: number;
+}
+
 /*
 */
 @Injectable()
 export class GithubApiProvider {
 
-  private apiUrl = 'https://api.github.com/graphql';
-  private token: string;
+  private client$ = new BehaviorSubject<GithubGqlClient>(null);
 
   constructor(
-    private http: Http,
     private apollo: Apollo,
     private auth: AuthProvider,
   ) {
     const client = provideClient();
     this.auth.user$
-      .debug('GithubApiProvider auth.user$')
+      .debug('GithubApiProvider#auth.user$')
       .subscribe(user => {
-        if (user) {
-          this.token = user.token;
-          client.token = user.token;
+        const token = user ? user.token : null;
+        if (token) {
+          client.token = token;
+          this.client$.next(client);
         } else {
-          this.token = null;
-          client.token = null;
+          this.client$.next(null);
         }
       });
   }
 
-  setToken(token: string): void {
-    this.token = token;
-  }
-
-  /**
-   * 生httpを使う
-   * @param param
-   */
-  accessApi(param?: any): Observable<any> {
-    if (!this.token) {
-      return Observable.throw('token is null.');
-    }
-    const headers = new Headers();
-    headers.set('Authorization', `bearer ${this.token}`);
-    return this.http.request(this.apiUrl, {
-      method: param ? 'post' : 'get',
-      headers,
-      body: param ? param : undefined,
-    });
-  }
-
   getMe(): ApolloQueryObservable<ViewerProfileResponse> {
     return this.apollo.watchQuery<ViewerProfileResponse>({
-      query: viewerProfile
+      query: viewerProfileQuery
     });
-    // return this.accessApi({query});
   }
 
   /**
@@ -88,24 +70,46 @@ export class GithubApiProvider {
       orgReposNum: 3,
       reposNum: 3
     };
-    return this.apollo.watchQuery<HomeRepositoriesResponse>({
-      query: HomeRepositories,
-      variables
-    });
+    return this.client$
+      .filter(client => client !== null)
+      .map(() => {
+        return this.apollo.watchQuery<HomeRepositoriesResponse>({
+          query: homeRepositoriesQuery,
+          variables
+        });
+      }).mergeAll();
   }
 
   getRepo(variables: RepositoryVariables): ApolloQueryObservable<RepositoryResponse> {
-    return this.apollo.watchQuery<RepositoryResponse>({
-      query: Repository,
-      variables
-    });
+    return this.client$
+      .filter(client => client !== null)
+      .map(() => {
+        return this.apollo.watchQuery<RepositoryResponse>({
+          query: repositoryQuery,
+          variables
+        });
+      }).mergeAll();
   }
 
   getIssues(variables: IssuesVariables): ApolloQueryObservable<IssuesResponse> {
-    return this.apollo.watchQuery<IssuesResponse>({
-      query: Issues,
-      variables
-    });
+    return this.client$
+      .filter(client => client !== null)
+      .map(() => {
+        return this.apollo.watchQuery<IssuesResponse>({
+          query: issuesQuery,
+          variables
+        });
+      }).mergeAll();
   }
 
+  getIssue(variables: IssueVariables): ApolloQueryObservable<IssueResponse> {
+    return this.client$
+      .filter(client => client !== null)
+      .map(() => {
+        return this.apollo.watchQuery<IssueResponse>({
+          query: issueQuery,
+          variables
+        });
+      }).mergeAll();
+  }
 }

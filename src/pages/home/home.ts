@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import {Observable} from 'rxjs';
 import {GithubApiProvider} from '../../providers/github-api/github-api';
 import {HomeRepositoriesViewer} from '../../providers/github-api/query/home-repositories';
+import {RepoPage} from '../repo/repo';
 
 @Component({
   selector: 'page-home',
@@ -28,13 +29,12 @@ export class HomePage {
       name: repo.name,
       owner: repo.owner.login,
     }
-    this.navCtrl.push('RepoPage', params);
+    this.navCtrl.push(RepoPage, params);
   }
 
   private initRepos(): void {
     this.repos$ = this.githubApi.getHomeRepos()
-      .debug('getHomeRepos viewer')
-      // .delay(100000)
+      .debug('HomePage#initRepos: getHomeRepos')
       .map(resp => resp.data.viewer)
       .share();
   }
