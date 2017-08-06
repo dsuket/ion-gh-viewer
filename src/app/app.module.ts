@@ -16,7 +16,7 @@ import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
 import { WelcomePage } from '../pages/welcome/welcome';
-import { SettingPage } from '../pages/setting/setting';
+import { AccountsPage } from '../pages/accounts/accounts';
 import { RepoPage } from '../pages/repo/repo';
 import { ReposPage } from '../pages/repos/repos';
 import { IssuesPage } from '../pages/issues/issues';
@@ -54,13 +54,13 @@ const ionicConfig = {
     HomePage,
     TabsPage,
     WelcomePage,
-    SettingPage,
+    AccountsPage,
     RepoPage,
     ReposPage,
-    RepositoriesComponent,
-    FromnowPipe,
     IssuesPage,
     IssuePage,
+    RepositoriesComponent,
+    FromnowPipe,
   ],
   imports: [
     BrowserModule,
@@ -79,18 +79,18 @@ const ionicConfig = {
     HomePage,
     TabsPage,
     WelcomePage,
-    SettingPage,
+    AccountsPage,
     RepoPage,
     ReposPage,
     IssuesPage,
-    IssuePage
+    IssuePage,
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider,
-    GithubApiProvider
+    GithubApiProvider,
   ]
 })
 export class AppModule {}

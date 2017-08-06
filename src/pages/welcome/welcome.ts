@@ -20,7 +20,8 @@ export class WelcomePage {
   }
 
   login() {
-    this.auth.loginWithGithub().subscribe();
+    this.auth.loginWithGithub()
+      .subscribe(null, err => console.error('login error', err));
   }
 
 }

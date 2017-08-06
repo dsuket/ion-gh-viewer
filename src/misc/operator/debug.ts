@@ -18,7 +18,7 @@ Observable.prototype.debug = function (message: string) {
     },
     function () {
       if (debuggerOn) {
-        console.log('Completed.');
+        console.log(message + ' Completed.');
       }
     }
   );

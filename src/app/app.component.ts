@@ -24,18 +24,19 @@ export class MyApp {
     private auth: AuthProvider,
     private loadingCtrl: LoadingController,
   ) {
-    this.startLoading();
+    this.showLoading();
     this.initPlatformReady();
     this.initAuthUser();
   }
 
-  private startLoading(): void {
+  private showLoading(): void {
     this.loader = this.loadingCtrl.create({
       content: "Please wait...",
     });
     this.loader.present();
   }
-  private stopLoading(): void {
+
+  private hideLoading(): void {
     if (this.loader) {
       this.loader.dismiss();
       this.loader = null;
@@ -43,21 +44,28 @@ export class MyApp {
   }
 
   private initPlatformReady(): Promise<any> {
-    return this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.splashScreen.hide();
-    });
+    return this.platform.ready()
+      .then(() => {
+        if (this.platform.is('cordova')) {
+          this.initNativePlatformReady();
+        }
+      });
+  }
+
+  private initNativePlatformReady(): void {
+    this.statusBar.styleDefault();
+    this.splashScreen.hide();
   }
 
   private initAuthUser(): void {
     this.auth.user$
-      .debug('MyApp#initAuthUser')
       .filter(user => user !== undefined)
+      .debug('MyApp#initRootPage')
       .subscribe(user => this.initRootPage(user))
   }
 
   private initRootPage(user: User): void {
-    this.stopLoading();
+    this.hideLoading();
     if (user) {
       this.rootPage = TabsPage;
     } else {

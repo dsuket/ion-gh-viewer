@@ -1,8 +1,9 @@
 
 export interface UserOptions {
+  displayName?: string;
   username?: string;
   id?: string;
-  avatar_url?: string;
+  avatarUrl?: string;
   url?: string;
   email?: string;
   token?: string;
@@ -13,9 +14,10 @@ export interface UserOptions {
  */
 export class User {
 
+  public displayName?: string
   public username?: string;
   public id?: string;
-  public avatar_url?: string;
+  public avatarUrl?: string;
   public url?: string;
   public email?: string;
   public token: string;

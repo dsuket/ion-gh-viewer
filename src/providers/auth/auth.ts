@@ -22,7 +22,7 @@ export class AuthProvider {
     private storage: Storage,
     private afAuth: AngularFireAuth,
   ) {
-    this.loadUser();
+    this.loadUser().subscribe();
   }
 
   /**
@@ -43,27 +43,25 @@ export class AuthProvider {
    * logout
    */
   logout(): Observable<void> {
-    const logout$ = (this.platform.is('cordova') ?
-      this.logoutWithGithubOnCordova() :
-      this.logoutWithGithubOnWeb()
-    );
-
-    return logout$
+    return Observable.fromPromise(this.afAuth.auth.signOut())
+      .mapTo(null)
       .debug('logout')
-      .do(() => this.user$.next(null))
+      .do(user => this.user$.next(user))
       .first();
   }
 
   /**
    * load user from storage
    */
-  private loadUser(): void {
-    this.storage.get('user')
-      .then(user => {
+  private loadUser(): Observable<User> {
+    return Observable.fromPromise(this.storage.get('user'))
+      .debug('loadUser')
+      .do(user => {
         this.user$.next(user);
         this.user$
           .filter(u => user !== u)
           .subscribe(user => {
+            console.debug('storage.set', user);
             this.storage.set('user', user);
           });
       });
@@ -79,14 +77,6 @@ export class AuthProvider {
     githubProvider.addScope('read:org');
     return Observable.fromPromise(this.afAuth.auth.signInWithPopup(githubProvider))
       .map(result => this.createUser(result));
-  }
-
-  /**
-   * logout with github on web
-   * use firebase
-   */
-  private logoutWithGithubOnWeb(): Observable<void> {
-    return Observable.fromPromise(this.afAuth.auth.signOut()).mapTo(undefined);
   }
 
   /**
@@ -106,21 +96,14 @@ export class AuthProvider {
 
   }
 
-  /**
-   * logout with github on cordoba
-   * not implements
-   */
-  private logoutWithGithubOnCordova(): Observable<void> {
-    return Observable.of(undefined);
-  }
-
   private createUser(result: any): User {
-    const {user, credential} = result;
+    const {user, additionalUserInfo, credential} = result;
     const options = {
-      username: user.login,
+      username: additionalUserInfo.profile.login,
       displayName: user.displayName,
       email: user.email,
-      token: credential.accessToken
+      token: credential.accessToken,
+      avatarUrl: additionalUserInfo.profile.avatar_url,
     };
     return new User(options);
   }
