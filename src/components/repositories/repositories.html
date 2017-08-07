@@ -7,7 +7,7 @@
     <ion-icon smaller name="star" item-start *ngIf="repo.viewerHasStarred"></ion-icon>
     {{repo.nameWithOwner}}
   </button>
-  <button class="show-more" ion-item *ngIf="totalCount > repos?.length">
+  <button class="show-more" ion-item *ngIf="totalCount > repos?.length" (click)="showMore()">
     Show more {{totalCount - repos.length}} repos
   </button>
 </ion-list>

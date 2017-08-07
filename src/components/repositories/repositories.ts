@@ -1,5 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {NavController} from 'ionic-angular';
+import {NavController, AlertController} from 'ionic-angular';
 import {RepoPage} from '../../pages/repo/repo';
 
 /**
@@ -27,7 +27,8 @@ export class RepositoriesComponent {
   selectRepo = new EventEmitter<GQL.IRepository>()
 
   constructor(
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private alertCtrl: AlertController
   ) {
   }
 
@@ -35,5 +36,12 @@ export class RepositoriesComponent {
     this.selectRepo.emit(repo);
   }
 
+  showMore(): void {
+    this.alertCtrl.create({
+      title: 'Not implements!',
+      message: 'This feature yet implements.',
+      buttons: ['Dismiss']
+    }).present();
+  }
 
 }

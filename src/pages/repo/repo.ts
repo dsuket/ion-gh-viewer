@@ -25,7 +25,7 @@ export class RepoPage {
   ) {
   }
 
-  ionViewDidLoad() {
+  ionViewDidLoad(): void {
     const repo = this.navParams.get('repo');
     if (repo) {
       this.repo$.emit(repo);

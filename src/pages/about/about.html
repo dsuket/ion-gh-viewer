@@ -7,5 +7,28 @@
 </ion-header>
 
 <ion-content padding>
+  <h3>Basic info</h3>
+  <ion-grid *ngIf="info">
+    <ion-row *ngFor="let item of info | keys">
+      <ion-col col-4>{{item.key}}</ion-col>
+      <ion-col col-8>{{item.value}}</ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <h3>Dependencies</h3>
+  <ion-grid *ngIf="dependencies">
+    <ion-row *ngFor="let item of dependencies | keys">
+      <ion-col col-8>{{item.key}}</ion-col>
+      <ion-col col-4>{{item.value}}</ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <h3>DevDependencies</h3>
+  <ion-grid *ngIf="devDependencies">
+    <ion-row *ngFor="let item of devDependencies | keys">
+      <ion-col col-8>{{item.key}}</ion-col>
+      <ion-col col-4>{{item.value}}</ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

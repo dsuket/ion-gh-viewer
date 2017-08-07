@@ -39,8 +39,8 @@ import {deepLinkConfig} from '../pages/routes';
 
 import '../misc/operator/debug';
 import { RepositoriesComponent } from '../components/repositories/repositories';
-import { FromnowPipe } from '../pipes/fromnow/fromnow';
 import {IssuePage} from '../pages/issue/issue';
+import {PipesModule} from '../pipes/pipes.module';
 
 const ionicConfig = {
   pageTransition: 'ios-transition',
@@ -60,7 +60,6 @@ const ionicConfig = {
     IssuesPage,
     IssuePage,
     RepositoriesComponent,
-    FromnowPipe,
   ],
   imports: [
     BrowserModule,
@@ -70,6 +69,7 @@ const ionicConfig = {
     AngularFireAuthModule,
     IonicStorageModule.forRoot(),
     ApolloModule.forRoot(provideClient),
+    PipesModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [

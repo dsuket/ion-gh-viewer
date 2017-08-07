@@ -1,8 +1,9 @@
 {
     "name": "ion-gh-viewer",
+    "description": "ionic github viewer sample",
     "version": "0.0.1",
     "author": "dsuket",
-    "homepage": "",
+    "homepage": "https://github.com/dsuket/ion-gh-viewer",
     "private": false,
     "scripts": {
         "clean": "ionic-app-scripts clean",
@@ -60,7 +61,6 @@
         "ts-graphql-plugin": "^1.1.0",
         "typescript": "2.3.4"
     },
-    "description": "An Ionic project",
     "cordova": {
         "plugins": {
             "cordova-plugin-console": {},

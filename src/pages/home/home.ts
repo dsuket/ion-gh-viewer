@@ -19,7 +19,8 @@ export class HomePage {
   ) {
   }
 
-  ionViewWillEnter(): void {
+  ionViewDidLoad(): void {
+    console.log('ionViewWillEnter');
     this.initRepos();
   }
 

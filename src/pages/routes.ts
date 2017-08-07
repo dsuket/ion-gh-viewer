@@ -6,6 +6,7 @@ import {WelcomePage} from './welcome/welcome';
 import {TabsPage} from './tabs/tabs';
 import {IssuesPage} from './issues/issues';
 import {IssuePage} from './issue/issue';
+import {AboutPage} from './about/about';
 
 export const deepLinkConfig: DeepLinkConfig = {
   links: [
@@ -16,5 +17,6 @@ export const deepLinkConfig: DeepLinkConfig = {
     { component: IssuePage, name: "IssuePage", segment: "repo/:owner/:name/issues/:issueNo", defaultHistory: ['HomePage']},
     { component: AccountsPage, name: "AccountsPage", segment: "accounts"},
     { component: WelcomePage, name: "WelcomePage", segment: "welcome"},
+    { component: AboutPage, name: "AboutPage", segment: "about"},
   ]
 };
