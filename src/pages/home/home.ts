@@ -20,7 +20,6 @@ export class HomePage {
   }
 
   ionViewDidLoad(): void {
-    console.log('ionViewWillEnter');
     this.initRepos();
   }
 

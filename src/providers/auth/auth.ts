@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
-import { Platform } from 'ionic-angular';
+import { Platform, LoadingController } from 'ionic-angular';
 import {User} from '../../models/user';
 import { Storage } from '@ionic/storage';
 
@@ -21,6 +21,7 @@ export class AuthProvider {
     private platform: Platform,
     private storage: Storage,
     private afAuth: AngularFireAuth,
+    private loadingCtrl: LoadingController,
   ) {
     this.loadUser().subscribe();
   }
@@ -29,6 +30,11 @@ export class AuthProvider {
    * login with github
    */
   loginWithGithub(): Observable<User> {
+    const loader = this.loadingCtrl.create({
+      content: "Please wait...",
+    });
+    loader.present();
+
     const login$ = this.platform.is('cordova') ?
       this.loginWithGithubOnCordova() :
       this.loginWithGithubOnWeb();
@@ -36,7 +42,8 @@ export class AuthProvider {
     return login$
       .debug('loginWithGithub')
       .do(user => this.user$.next(user))
-      .first();
+      .first()
+      .finally(() => loader.dismiss());
   }
 
   /**

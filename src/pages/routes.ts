@@ -16,7 +16,6 @@ export const deepLinkConfig: DeepLinkConfig = {
     { component: IssuesPage, name: "IssuesPage", segment: "repo/:owner/:name/issues", defaultHistory: ['HomePage']},
     { component: IssuePage, name: "IssuePage", segment: "repo/:owner/:name/issues/:issueNo", defaultHistory: ['HomePage']},
     { component: AccountsPage, name: "AccountsPage", segment: "accounts"},
-    { component: WelcomePage, name: "WelcomePage", segment: "welcome"},
     { component: AboutPage, name: "AboutPage", segment: "about"},
   ]
 };

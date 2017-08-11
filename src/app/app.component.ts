@@ -67,8 +67,10 @@ export class MyApp {
   private initRootPage(user: User): void {
     this.hideLoading();
     if (user) {
+      console.debug('set rootPage: TabsPage');
       this.rootPage = TabsPage;
     } else {
+      console.debug('set rootPage: WelcomePage');
       this.rootPage = WelcomePage;
     }
   }

@@ -1,6 +1,5 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {NavController, AlertController} from 'ionic-angular';
-import {RepoPage} from '../../pages/repo/repo';
+import {AlertController} from 'ionic-angular';
 
 /**
  * Generated class for the RepositoriesComponent component.
@@ -27,7 +26,6 @@ export class RepositoriesComponent {
   selectRepo = new EventEmitter<GQL.IRepository>()
 
   constructor(
-    private navCtrl: NavController,
     private alertCtrl: AlertController
   ) {
   }

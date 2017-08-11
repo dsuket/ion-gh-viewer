@@ -1,5 +1,5 @@
-import { Component, EventEmitter, ViewChild } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import { Component, EventEmitter } from '@angular/core';
+import { NavParams } from 'ionic-angular';
 import {GithubApiProvider, IssueState} from '../../providers/github-api/github-api';
 
 interface loadIssuesOptions {
@@ -47,7 +47,6 @@ export class IssuesPage {
   private pageInfo: GQL.IPageInfo;
 
   constructor(
-    private navCtrl: NavController,
     private navParams: NavParams,
     private githubApi: GithubApiProvider,
   ) {}
@@ -64,9 +63,6 @@ export class IssuesPage {
       });
 
     this.reloadIssues();
-  }
-
-  ionViewWillEnter(): void {
   }
 
   openIssuesPage(): void {

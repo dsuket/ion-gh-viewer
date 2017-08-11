@@ -1,6 +1,5 @@
 import { Component, EventEmitter } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
-import {Observable} from 'rxjs/Observable';
 import {GithubApiProvider} from '../../providers/github-api/github-api';
 import {IssuesPage} from '../issues/issues';
 import {IssuePage} from '../issue/issue';

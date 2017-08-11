@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {AuthProvider} from '../auth/auth';
-import { Apollo, ApolloQueryObservable } from 'apollo-angular';
+import { Apollo } from 'apollo-angular';
+import { ApolloQueryResult } from 'apollo-client';
+import { DocumentNode } from 'graphql';
 import {provideClient, GithubGqlClient} from '../../misc/appolo/github-gql-client';
 import {ViewerProfileResponse, viewerProfileQuery} from './query/viewer-profile';
 import {HomeRepositoriesResponse, homeRepositoriesQuery} from './query/home-repositories';
 import {RepositoryResponse, repositoryQuery} from './query/repository';
 import {issuesQuery, IssuesResponse} from './query/issues';
 import {IssueResponse, issueQuery} from './query/issue';
+import {Observable} from 'rxjs/Observable';
 
 export interface RepositoryVariables {
   owner: string;
@@ -55,16 +58,17 @@ export class GithubApiProvider {
       });
   }
 
-  getMe(): ApolloQueryObservable<ViewerProfileResponse> {
-    return this.apollo.watchQuery<ViewerProfileResponse>({
-      query: viewerProfileQuery
-    });
+  getMe(): Observable<ApolloQueryResult<ViewerProfileResponse>> {
+    return this.client$
+      .filter(client => client !== null)
+      .take(1)
+      .switchMap(() => this.query<ViewerProfileResponse>(viewerProfileQuery));
   }
 
   /**
    * get repository data for HomePage
    */
-  getHomeRepos(): ApolloQueryObservable<HomeRepositoriesResponse> {
+  getHomeRepos(): Observable<ApolloQueryResult<HomeRepositoriesResponse>> {
     const variables = {
       orgNum: 5,
       orgReposNum: 3,
@@ -72,44 +76,52 @@ export class GithubApiProvider {
     };
     return this.client$
       .filter(client => client !== null)
-      .map(() => {
-        return this.apollo.watchQuery<HomeRepositoriesResponse>({
-          query: homeRepositoriesQuery,
-          variables
-        });
-      }).mergeAll();
+      .take(1)
+      .switchMap(() => this.query<HomeRepositoriesResponse>(homeRepositoriesQuery, variables));
   }
 
-  getRepo(variables: RepositoryVariables): ApolloQueryObservable<RepositoryResponse> {
+  getRepo(variables: RepositoryVariables): Observable<ApolloQueryResult<RepositoryResponse>> {
     return this.client$
       .filter(client => client !== null)
-      .map(() => {
-        return this.apollo.watchQuery<RepositoryResponse>({
+      .take(1)
+      .switchMap(() => {
+        return this.apollo.query<RepositoryResponse>({
           query: repositoryQuery,
           variables
         });
-      }).mergeAll();
+      });
   }
 
-  getIssues(variables: IssuesVariables): ApolloQueryObservable<IssuesResponse> {
+  getIssues(variables: IssuesVariables): Observable<ApolloQueryResult<IssuesResponse>> {
     return this.client$
       .filter(client => client !== null)
-      .map(() => {
-        return this.apollo.watchQuery<IssuesResponse>({
-          query: issuesQuery,
-          variables
-        });
-      }).mergeAll();
+      .take(1)
+      .switchMap(() => this.query<IssuesResponse>(issuesQuery, variables));
   }
 
-  getIssue(variables: IssueVariables): ApolloQueryObservable<IssueResponse> {
+  getIssue(variables: IssueVariables): Observable<ApolloQueryResult<IssueResponse>> {
     return this.client$
       .filter(client => client !== null)
-      .map(() => {
-        return this.apollo.watchQuery<IssueResponse>({
-          query: issueQuery,
-          variables
-        });
-      }).mergeAll();
+      .take(1)
+      .switchMap(() => this.query<IssueResponse>(issueQuery, variables));
+  }
+
+  private query<T>(query: DocumentNode, variables?: any): Observable<ApolloQueryResult<T>> {
+    return this.apollo.query<T>({
+      query,
+      variables
+    })
+    .catch(err => {
+      debugger;
+      if (err.networkError) {
+          console.log('err.networkError', err.networkError);
+        if (err.networkError.response.status === 401) {
+          console.log('logout');
+          this.auth.logout();
+          return;
+        }
+      }
+      return Observable.throw(err);
+    });
   }
 }

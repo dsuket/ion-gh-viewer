@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import {AuthProvider} from '../../providers/auth/auth';
 
-interface Item {
-  label: string;
-  icon?: string;
-  action: Function;
-}
-
 @Component({
   selector: 'page-accounts',
   templateUrl: 'accounts.html',

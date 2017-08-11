@@ -1,5 +1,5 @@
 import { ApolloClient, createNetworkInterface } from 'apollo-client';
-import { RequestAndOptions } from 'apollo-client/transport/networkinterface';
+import { RequestAndOptions, ResponseAndOptions } from 'apollo-client/transport/networkinterface';
 
 export class GithubGqlClient extends ApolloClient {
 
@@ -16,6 +16,9 @@ export class GithubGqlClient extends ApolloClient {
     this.networkInterface.use([
       {applyMiddleware: this.applyToken.bind(this)}
     ]);
+    this.networkInterface.useAfter([
+      {applyAfterware: this.errorHandler.bind(this)}
+    ])
   }
 
   private applyToken(req: RequestAndOptions, next: Function): void {
@@ -26,6 +29,19 @@ export class GithubGqlClient extends ApolloClient {
     req.options.headers = headers;
     headers.authorization = `bearer ${this.token}`;
     next();
+  }
+
+  private errorHandler(resp: ResponseAndOptions, next: Function): void {
+    console.log('errorHandler', resp);
+    const {response} = resp;
+    if (response.status === 200) {
+      next();
+      return;
+    }
+    response.json().then(json => {
+      console.log('response.json', json);
+      next(json);
+    })
   }
 }
 
